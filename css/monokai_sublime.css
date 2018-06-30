@@ -45,6 +45,7 @@ pre .hexcolor {
 pre .tag .value,
 pre .code,
 pre .title,
+pre .bash,
 pre .css .class,
 pre .class .title:last-child {
   color: #a6e22e;
