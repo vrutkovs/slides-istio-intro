@@ -1,10 +1,10 @@
 # Istio
-## Intro into service meshes
+## Intro into service mesh
 
 Vadim Rutkovsky <vrutkovs@redhat.com>
 
 ---
-#### So you've installed Kubernetes
+### So you've installed Kubernetes
 
 All the cool kids do this these days,
 
@@ -19,31 +19,70 @@ but what about my app?
 ---
 ### Istio
 
-An open platform to connect, manage, and secure microservices
+An open platform to connect, manage, and secure microservices.
+https://istio.sh
 
 * Developed by Google, IBM, and Lyft
-* Sidecar pattern - every pod gets Envoy proxy, which additionally filters traffic
+* **Sidecar pattern** - every pod gets Envoy proxy, which additionally filters traffic
+* Controlled by CRD
+
 ---
 ### Istio - advanced features
 
-* Additional routing rules - e.g. cookie-based
+* Flexible routing rules - e.g. cookie-based
 * Ingress/Egress traffic rules
-* Circuit breaking - drop slow requests sooner
-* Traffic shifting - balance between services
-* Mirroring - copy existing traffic to not-yet-available version of the app
-* TLS inside the cluster for various levels of access between microservices
+* **Circuit breaking** - drop slow requests sooner
+* **Traffic shifting** - split traffic between services
+* **Mirroring** - copy existing traffic to not-yet-available version of the app
+* **TLS between pods** - in-cluster security
+
+---
+#### Istio components
+* **Pilot** - controls Envoy configs - routing, service discovery
+* **Mixer** - enforces policies and collects stats from Envoy
+* **Citadel** - provides service-to-service authentication
+
+Additional services:
+* **Zipkin** - tracing requests
+* **Prometheus+Grafana** - metrics
+* **ServiceGraph** - render service status as a graph
+
+---
+### Getting Started
+Fetch `istioctl` binary and config yamls
+```shell
+$ curl -L https://git.io/getLatestIstio | sh -
+$ cd istio-0.8.0
+$ export PATH=$PWD/bin:$PATH
+```
+
+Setup Istio with service-to-service auth:
+```
+$ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
+```
+OR without auth:
+```
+$ kubectl apply -f install/kubernetes/istio-demo.yaml
+```
 
 ---
 ### Demo
 
-CatCatGo - search engine for Reddit cat pictures.
+**CatCatGo** - search engine for Reddit cat pictures.
 
 * Database - MongoDB
-* Backend - python aiohttp, responds to 'api/v1.0/search/kitten'
+* Backend - python aiohttp
+
+  responds to 'api/v1.0/search/kitten'
 * Frontend - ReactJS app
+* (hidden) CronJob to scrape fresh cat pictures from several subreddits and fill DB in
+
+https://catcatgo.cloud.vrutkovs.eu
 
 ---
 ### Gateway
+`Gateway` - Istio custom resource which manages ingress
+
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -62,6 +101,8 @@ spec:
 ```
 ---
 ### DestinationRule
+`DestinationRule` - Istio CR to select pods based on app/version/etc.
+
 ```yml
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -75,7 +116,8 @@ spec:
       version: v1
 ```
 ---
-### VirtualService
+### VirtualService part 1
+`VirtualService` - routing rules for services
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -86,6 +128,12 @@ spec:
   - "*"
   gateways:
   - catacatgo-gateway
+...
+```
+---
+### VirtualService part 2
+```
+...
   http:
   - match:
     - uri:
@@ -98,6 +146,12 @@ spec:
     - destination:
         host: ui
         subset: v1
+...
+```
+---
+### VirtualService part 3
+```
+...
   - match:
     - uri:
         prefix: /api/v1.0/search/
@@ -109,13 +163,15 @@ spec:
 ---
 ### Metrics and Tracing
 
-* Grafana + Prometheus stack to collect metrics
-* Prepared dashboard to show amount of requests, success rate, rps and response size
-* Jaeger UI - a tool to trace requests
+Grafana + Prometheus stack to collect metrics
+
+Dashboard to show amount of requests, success rate, rps and response size
+---
+### Tracing requests
+Jaeger UI - a tool to trace requests
 ---
 ### Demo - v2 canary
-```diff
-@ route-rules.yml:22 @ spec:
+```yaml
   - name: v1
     labels:
       version: v1
@@ -125,8 +181,7 @@ spec:
 ```
 ---
 ### Demo - v2 canary
-```diff
-@ gateway.yml:37 @ spec:
+```yaml
     - destination:
         host: ui
         subset: v1
@@ -166,7 +221,7 @@ Delay the requests
       percent: 50
 ```
 ---
-### Poor man's DOS protection
+### Limit incoming requests - config
 ```yaml
 spec:
   host: backend
@@ -185,8 +240,8 @@ spec:
         maxEjectionPercent: 100
 ```
 ---
-### Siege results
-```yaml
+### Limit incoming requests - results
+```
 $ sudo podman run --rm -ti ecliptik/docker-siege -b -c 5 https://catcatgo.cloud.vrutkovs.eu/api/v1.0/search/test
 New configuration template added to /root/.siege
 Run siege -C to view the current settings in that file
@@ -217,7 +272,7 @@ HTTP/1.1 503     0.51 secs:      57 bytes ==> GET  /api/v1.0/search/test
 ### Mirroring
 
 Copy real traffic to v2 version
-```
+```yaml
 - destination:
     host: ui
     subset: v1
@@ -225,7 +280,17 @@ Copy real traffic to v2 version
     host: ui
     subset: v2
 ```
+
+Check `istio-proxy` container logs to see the real traffic results
+
 ---
 # Questions?
 
+Slides: https://vrutkovs.github.io/slides-istio-intro
 Code: https://github.com/vrutkovs/catcatgo
+
+*<!-- -->* vrutkovs  <!-- .element: class="fab fa-github-square" -->
+
+*<!-- -->* vrutkovs  <!-- .element: class="fab fa-twitter-square" -->
+
+*<!-- -->* vrutkovs@redhat.com  <!-- .element: class="fas fa-envelope-square" -->
