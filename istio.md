@@ -10,11 +10,11 @@ All the cool kids do this these days,
 
 but what about my app?
 
-* How does my service map look like?
 * Why is it taking so long to process a request?
-* How many RPS does my service get?
+* What's the performance of my services?
 * How many 404/5xx errors are my users seeing?
 * How do I rollout the new version just for a fraction of users?
+* How do my services connect to each other?
 
 ---
 ### Istio
@@ -38,46 +38,15 @@ https://istio.sh
 
 ---
 #### Istio components
-* **Pilot** - controls Envoy configs - routing, service discovery
-* **Mixer** - enforces policies and collects stats from Envoy
-* **Citadel** - provides service-to-service authentication
 
-Additional services:
+Image from istio site about services interaction
+
+---
+### Istion - additional services
+
 * **Zipkin**, **Jaeger** - tracing requests
 * **Prometheus+Grafana** - metrics
 * **ServiceGraph**, **Kiali** - render service status as a graph
-
----
-### Getting Started
-Fetch `istioctl` binary and config yamls
-```shell
-$ curl -L https://git.io/getLatestIstio | sh -
-$ cd istio-0.8.0
-$ export PATH=$PWD/bin:$PATH
-```
-
-Setup Istio with service-to-service auth:
-```
-$ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
-```
-OR without auth:
-```
-$ kubectl apply -f install/kubernetes/istio-demo.yaml
-```
-
----
-### Demo
-
-**CatCatGo** - search engine for Reddit cat pictures.
-
-* Database - MongoDB
-* Backend - python aiohttp
-
-  responds to 'api/v1.0/search/kitten'
-* Frontend - ReactJS app
-* (hidden) CronJob to scrape fresh cat pictures from several subreddits and fill DB in
-
-https://catcatgo.cloud.vrutkovs.eu
 
 ---
 ### Gateway
@@ -139,6 +108,54 @@ Istio allows mirroring traffic from `v1` to `v2` endpoint.
 
 This enables developers to check the behaviour of not yet deployed service on production
 using 'real' traffic.
+
+---
+### Getting Started
+Fetch `istioctl` binary and config yamls
+```shell
+$ curl -L https://git.io/getLatestIstio | sh -
+$ cd istio-0.8.0
+$ export PATH=$PWD/bin:$PATH
+```
+
+Setup Istio with service-to-service auth:
+```
+$ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
+```
+OR without auth:
+```
+$ kubectl apply -f install/kubernetes/istio-demo.yaml
+```
+
+---
+### Demo
+
+**CatCatGo** - search engine for Reddit cat pictures.
+
+* Database - MongoDB
+* Backend - python aiohttp
+
+  responds to 'api/v1.0/search/kitten'
+* Frontend - ReactJS app
+* (hidden) CronJob to scrape fresh cat pictures from several subreddits and fill DB in
+
+https://catcatgo.cloud.vrutkovs.eu
+
+---
+### Demo - canary deployment for some users
+
+---
+### Demo - monitoring
+
+---
+### Demo - fault injection
+
+---
+### Demo - mesh overview
+
+Kiali
+
+screenshot
 
 ---
 # Questions?
