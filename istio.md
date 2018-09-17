@@ -74,13 +74,13 @@ Grafana + Prometheus stack to collect metrics
 
 Dashboard to show amount of requests, success rate, rps and response size by app version
 
-<screenshot>
+dashboard screenshot
 
 ---
 ### Tracing requests
 Jaeger UI - a tool to trace requests
 
-<screenshot>
+Jaeger screenshot
 
 ---
 ### Enforced TLS between services
