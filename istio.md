@@ -27,6 +27,10 @@ https://istio.sh
 * CRD-based, controlled by `kubectl` commands
 
 ---
+![istio](imgs/arch.svg)
+<!-- .element style="height: 550px" -->
+
+---
 ### Istio - advanced features
 
 * Flexible routing rules - e.g. cookie-based
@@ -37,14 +41,29 @@ https://istio.sh
 * **TLS between pods** - in-cluster security
 
 ---
-![istio](imgs/arch.svg)
-
----
 ### Istio - additional services
 
 * **Zipkin**, **Jaeger** - tracing requests
 * **Prometheus+Grafana** - metrics
 * **ServiceGraph**, **Kiali** - render service status as a graph
+
+---
+#### Metrics
+
+![grafana](imgs/grafana.png)
+
+---
+#### Tracing requests
+Jaeger UI - a tool to trace requests
+
+![grafana](imgs/jaeger.png)
+
+---
+#### Mesh Overview
+
+Kiali - a tool to visualize the mesh
+
+![grafana](imgs/kiali.png)
 
 ---
 ### Gateway
@@ -65,23 +84,6 @@ https://istio.sh
   - header-based
   - cookie-based
 * Split traffic between endpoints services by weight
----
-#### Metrics
-
-![grafana](imgs/grafana.png)
-
----
-#### Tracing requests
-Jaeger UI - a tool to trace requests
-
-![grafana](imgs/jaeger.png)
-
----
-#### Mesh Overview
-
-Kiali - a tool to visualize the mesh
-
-![grafana](imgs/kiali.png)
 
 ---
 ### Enforced TLS between services
