@@ -37,12 +37,10 @@ https://istio.sh
 * **TLS between pods** - in-cluster security
 
 ---
-#### Istio components
-
-Image from istio site about services interaction
+![istio](imgs/arch.svg)
 
 ---
-### Istion - additional services
+### Istio - additional services
 
 * **Zipkin**, **Jaeger** - tracing requests
 * **Prometheus+Grafana** - metrics
@@ -68,19 +66,22 @@ Image from istio site about services interaction
   - cookie-based
 * Split traffic between endpoints services by weight
 ---
-### Metrics
+#### Metrics
 
-Grafana + Prometheus stack to collect metrics
-
-Dashboard to show amount of requests, success rate, rps and response size by app version
-
-dashboard screenshot
+![grafana](imgs/grafana.png)
 
 ---
-### Tracing requests
+#### Tracing requests
 Jaeger UI - a tool to trace requests
 
-Jaeger screenshot
+![grafana](imgs/jaeger.png)
+
+---
+#### Mesh Overview
+
+Kiali - a tool to visualize the mesh
+
+![grafana](imgs/kiali.png)
 
 ---
 ### Enforced TLS between services
@@ -111,12 +112,7 @@ using 'real' traffic.
 
 ---
 ### Getting Started
-Fetch `istioctl` binary and config yamls
-```shell
-$ curl -L https://git.io/getLatestIstio | sh -
-$ cd istio-0.8.0
-$ export PATH=$PWD/bin:$PATH
-```
+Download Istio tarball from https://github.com/istio/istio/releases/
 
 Setup Istio with service-to-service auth:
 ```
@@ -152,10 +148,6 @@ https://catcatgo.cloud.vrutkovs.eu
 
 ---
 ### Demo - mesh overview
-
-Kiali
-
-screenshot
 
 ---
 # Questions?
