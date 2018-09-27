@@ -147,9 +147,6 @@ https://catcatgo.cloud.vrutkovs.eu
 ### Demo - fault injection
 
 ---
-### Demo - mesh overview
-
----
 # Questions?
 
 Slides: https://vrutkovs.github.io/slides-istio-intro
